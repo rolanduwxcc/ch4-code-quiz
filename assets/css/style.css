@@ -1,0 +1,19 @@
+ul {
+    list-style-type: none;
+}
+header {
+    display:flex;
+}
+header h1, header p {
+    flex: 1;
+}
+main {
+    display: flex;
+    justify-content: center;
+}
+.question-wrapper {
+    flex: 1;
+}
+.answer-wrapper {
+    flex: 1;
+}
