@@ -19,6 +19,6 @@ Provide a timed quiz on JavaScript fundamentals that stores scores of user for c
 * Warren Rowland - Find me on [Linked In](https://www.linkedin.com/in/linkedinrowland/) or [GitHub](https://github.com/rolanduwxcc)
 
 ## Screenshots
-![Password Generator Page](assets/images/CodingQuiz.png)
+![Password Generator Page](assets/img/CodingQuiz.png)
 
 ### ©️2020 Rolanduwxcc, Inc 
