@@ -30,6 +30,7 @@ var timerEl = document.getElementById("quiz-timer");
 var questionWrapEl = document.querySelector(".question-wrapper");
 var scoreWrapEl = document.querySelector(".score-wrapper");
 var mainPageEl = document.querySelector(".page-content");
+var msg = document.querySelector(".msg");
 var timeLeft = 60;
 var quizTimer;
 var quizLength = quizData.length; 
@@ -247,11 +248,17 @@ var checkAnswer = function(answer) {
     if (!(answer === quizData[questionNumber].C)) {
         timeLeft = timeLeft - 10;
         console.log(answer + " is NOT the same as " + quizData[questionNumber].C);
+        msg.classList.add("error");
+        msg.innerHTML = "<h1>Wrong!</h1>";
+        setTimeout(() => msg.innerHTML="", 1000);
     }
     else {
         console.log(answer + " is the same as " + quizData[questionNumber].C);
+        msg.classList.add("error");
+        msg.innerHTML = "<h1>Correct!</h1>";
+        setTimeout(() => msg.innerHTML="", 1000);
     }
-    questionNumber++;
+    questionNumber++; //increment the question counter after confirming the last answer.
 };
 
 //--------------------------FOR WHEN YOU SELECT AN ANSWER TO A QUESTION
@@ -268,7 +275,6 @@ var answeredButtonHandler = function(event) {
     if (!(answerSelected === "")) {
         checkAnswer(answerSelected);
     }
-    // questionNumber++; //increment the index to get the next question/answer to ask
     if (questionNumber >= quizLength) {
         submitScore();
         console.log("Did i make it here!" + "--submitscore");
