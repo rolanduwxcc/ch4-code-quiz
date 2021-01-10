@@ -3,34 +3,34 @@ var quizData = [
     { 
         Q: "Commonly used data types DO NOT include:", 
         A: ["strings", "booleans", "alerts-1", "numbers"],
-        C: "3"
+        C: "2" //note this is the 3rd answer but 2 element of A array
     },
     {
         Q: "The condition in an if/else statement is enclosed with __________.",
         A: ["quotes", "curly brackets", "parenthesis-1", "square brackets"],
-        C: "3"
+        C: "2"
     },
     {
         Q: "Arrays in JavaScript can be used to store ____________.",
         A: ["numbers and strings", "other arrays", "booleans", "all of the above-1"],
-        C: "4"
+        C: "3"
     },
     {
         Q: "String values must be enclosed within ______________ when being assigned to avariables.",
         A: ["commas", "curly brackets", "quotes-1", "parenthesis"],
-        C: "3"
+        C: "2"
     },
     {
         Q: "A very useful tool used during development and debugging for printing content to the debugger is:",
         A: ["JavaScript", "terminal/bash", "for loops", "console.log"],
-        C: "4"
+        C: "3"
     }
 ];
 var timerEl = document.getElementById("quiz-timer");
 var questionWrapEl = document.querySelector(".question-wrapper");
 var scoreWrapEl = document.querySelector(".score-wrapper");
 var mainPageEl = document.querySelector(".page-content");
-var timeLeft = 15;
+var timeLeft = 60;
 var quizTimer;
 var quizLength = quizData.length; 
 var questionNumber = 0;
@@ -56,6 +56,9 @@ var startPage = function() {
     questionWrapEl.appendChild(welcomeTitleEl);
     questionWrapEl.appendChild(welcomeInstructionsEl);
     questionWrapEl.appendChild(startQuizBtn);
+
+    //Show Timer set to 60
+    timerEl.textContent = "Timer: " + timeLeft;
 };
 
 var scoreTimer = function() {
@@ -76,16 +79,16 @@ var scoreTimer = function() {
 var startTheQuiz = function() {
     quizTimer = scoreTimer();
     loadScores();
-    askQuestion(0);
+    askQuestion(questionNumber);
 };
 
-var askQuestion = function(i) {
+var askQuestion = function(number) {
     //clear out the previous data on the page
     questionWrapEl.innerHTML = "";
 
     //element represents an object element from the quizData array
     //each object element stores a question and answer
-    var element = quizData[i];
+    var element = quizData[number];
 
     //setup the h2/question element and set the textContent
     var questionEl = document.createElement("h2");
@@ -97,15 +100,18 @@ var askQuestion = function(i) {
     var answerList = element.A;        
     for (let j = 0; j < answerList.length; j++) {
         const answer = answerList[j];
-        var answerEl = document.createElement("li");
-        answerEl.textContent =  answer;
-        answerEl.innerHTML = "<button class='answer-btn' id='1'>" + answer + "</button>";
-        answerEl.setAttribute("answer-id",j);
-        answerChoicesEl.appendChild(answerEl);
+        var answerListItemEl = document.createElement("li");
+        var answerBtnEl = document.createElement("button")
+
+        answerBtnEl.setAttribute("class","answer-btn");
+        answerBtnEl.setAttribute("data-task-id",j);
+        answerBtnEl.textContent = answer;
+
+        answerListItemEl.appendChild(answerBtnEl);
+        answerChoicesEl.appendChild(answerListItemEl);
     }
-        questionWrapEl.appendChild(answerChoicesEl);
-    
-    questionNumber++; //TESTING
+    //put all the answers under the question
+    questionWrapEl.appendChild(answerChoicesEl);
 };
 
 var submitScore = function() {
@@ -124,7 +130,8 @@ var submitScore = function() {
     else {
         var score = 0;
     }
-    
+    timerEl.textContent = "Timer: " + score;
+
     //setup the h2/title element and set the textContent
     var endTitleEl = document.createElement("h2");
     endTitleEl.textContent = "All done";
@@ -153,6 +160,9 @@ var saveScores = function() {
     //local storage setItem
     // localStorage.setItem("tasks", tasks);
     var initialsEl = document.querySelector("input[name='ini']").value;
+    if (!initialsEl) {
+        initialsEl = "ANONYMOUS"
+    }
 
     var scoreDataObj = {
         initials: initialsEl,
@@ -186,6 +196,7 @@ var viewHighScores = function() {
 
     var clearScoresBtn = document.createElement("button");
     clearScoresBtn.setAttribute("class", "clear-scores-btn");
+    clearScoresBtn.setAttribute("onclick","deleteScores()");
     clearScoresBtn.textContent = "Clear Scores";
     scoreWrapEl.appendChild(clearScoresBtn);
 
@@ -226,53 +237,58 @@ var loadScores = function() {
 
 var deleteScores = function() {
     localStorage.removeItem("scores");
+    startOver();
+};
+
+var checkAnswer = function(answer) {
+    if (answer === null) {
+        return;
+    }
+    if (!(answer === quizData[questionNumber].C)) {
+        timeLeft = timeLeft - 10;
+        console.log(answer + " is NOT the same as " + quizData[questionNumber].C);
+    }
+    else {
+        console.log(answer + " is the same as " + quizData[questionNumber].C);
+    }
 };
 
 //--------------------------FOR WHEN YOU SELECT AN ANSWER TO A QUESTION
-var answerButtonHandler = function(event) {
-    //buttons will call relevant functions to create HMTL when clicked
+var answeredButtonHandler = function(event) {
+    //when question is answered then those clicked buttons will call here
+    //relevant functions to create HMTL for next question and
+    //test if button just clicked is the correct one or not and update
+    //timer accordingly
+    // console.log(event.target);
     event.preventDefault();
+    
+    //get the answer id and see if it is same as the C value of the object
+    var answerSelected = event.target.getAttribute("data-task-id");
+    if (!(answerSelected === "")) {
+        checkAnswer(answerSelected);
+    }
+    questionNumber++; //increment the index to get the next question/answer to ask
     if (questionNumber >= quizLength) {
         submitScore();
         console.log("Did i make it here!" + "--submitscore");
     }
-    // else if (event.target.matches(".start-btn")) {
-    //     questionNumber = 0; //always reset to 0 if the start button was clicked
-    //     quizTimer = scoreTimer();
-    //     loadScores();
-    //     askQuestion(questionNumber);
-    //     questionNumber++;
-    //     console.log("Did i make it here!" + "--ask first question");
-
-    // }
     else if (event.target.matches(".answer-btn")) {
         askQuestion(questionNumber);
         // questionNumber++;
-        console.log("Did i make it here!" + "--ask question");
     }
 };
 
 var scoreHandler = function(event) {
     event.preventDefault();
-    console.log(event.currentTarget);
+    // console.log(event.currentTarget);
     if (event.target.matches(".submit-score-btn")) {
         saveScores();
         viewHighScores();
     }
-    else if (event.target.matches(".clear-scores-btn")){
-        console.log("Clear scores");
-        event.stopImmediatePropagation();
-        deleteScores();
-        reStart();
-    }
-    else if (event.target.matches(".restart-btn")); {
-        console.log("Start Over!");
-        reStart();
-    }
 };
 
 //---------------------------------------------------------Listeners
-questionWrapEl.addEventListener("click",answerButtonHandler);
+questionWrapEl.addEventListener("click",answeredButtonHandler);
 scoreWrapEl.addEventListener("click",scoreHandler);
 //---------------------------------------------------------Calls
 startPage();

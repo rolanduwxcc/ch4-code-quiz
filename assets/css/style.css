@@ -10,9 +10,11 @@ header {
     justify-content: space-around;
     align-items: center;
     text-align: center;
+    
 }
 header h1, header p {
     flex: 1;
+    font-size:xx-large;
 }
 main {
     margin: 100px;
