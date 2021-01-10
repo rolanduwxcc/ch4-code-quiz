@@ -2,7 +2,7 @@
 var quizData = [
     { 
         Q: "Commonly used data types DO NOT include:", 
-        A: ["strings", "booleans", "alerts-1", "numbers"],
+        A: ["strings", "booleans", "alerts", "numbers"],
         C: "2" //note this is the 3rd answer but 2 element of A array
     },
     {
@@ -12,12 +12,12 @@ var quizData = [
     },
     {
         Q: "Arrays in JavaScript can be used to store ____________.",
-        A: ["numbers and strings", "other arrays", "booleans", "all of the above-1"],
+        A: ["numbers and strings", "other arrays", "booleans", "all of the above"],
         C: "3"
     },
     {
         Q: "String values must be enclosed within ______________ when being assigned to avariables.",
-        A: ["commas", "curly brackets", "quotes-1", "parenthesis"],
+        A: ["commas", "curly brackets", "quotes", "parenthesis"],
         C: "2"
     },
     {
@@ -251,6 +251,7 @@ var checkAnswer = function(answer) {
     else {
         console.log(answer + " is the same as " + quizData[questionNumber].C);
     }
+    questionNumber++;
 };
 
 //--------------------------FOR WHEN YOU SELECT AN ANSWER TO A QUESTION
@@ -261,20 +262,20 @@ var answeredButtonHandler = function(event) {
     //timer accordingly
     // console.log(event.target);
     event.preventDefault();
-    
+
     //get the answer id and see if it is same as the C value of the object
     var answerSelected = event.target.getAttribute("data-task-id");
     if (!(answerSelected === "")) {
         checkAnswer(answerSelected);
     }
-    questionNumber++; //increment the index to get the next question/answer to ask
+    // questionNumber++; //increment the index to get the next question/answer to ask
     if (questionNumber >= quizLength) {
         submitScore();
         console.log("Did i make it here!" + "--submitscore");
     }
-    else if (event.target.matches(".answer-btn")) {
+    // else if (event.target.matches(".answer-btn")) {
+    else {
         askQuestion(questionNumber);
-        // questionNumber++;
     }
 };
 
