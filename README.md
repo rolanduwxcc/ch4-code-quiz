@@ -14,6 +14,7 @@ Provide a timed quiz on JavaScript fundamentals that stores scores of user for c
 
 ## Contributions
 * Warren Rowland
+* most of the CSS used from Taskinator project
 
 ## Contact Info
 * Warren Rowland - Find me on [Linked In](https://www.linkedin.com/in/linkedinrowland/) or [GitHub](https://github.com/rolanduwxcc)
