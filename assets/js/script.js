@@ -2,30 +2,35 @@
 var quizData = [
     { 
         Q: "Commonly used data types DO NOT include:", 
-        A: ["strings", "booleans", "alerts-1", "numbers"]
+        A: ["strings", "booleans", "alerts-1", "numbers"],
+        C: "3"
     },
     {
         Q: "The condition in an if/else statement is enclosed with __________.",
         A: ["quotes", "curly brackets", "parenthesis-1", "square brackets"],
+        C: "3"
     },
     {
         Q: "Arrays in JavaScript can be used to store ____________.",
         A: ["numbers and strings", "other arrays", "booleans", "all of the above-1"],
+        C: "4"
     },
     {
         Q: "String values must be enclosed within ______________ when being assigned to avariables.",
         A: ["commas", "curly brackets", "quotes-1", "parenthesis"],
+        C: "3"
     },
     {
         Q: "A very useful tool used during development and debugging for printing content to the debugger is:",
         A: ["JavaScript", "terminal/bash", "for loops", "console.log"],
+        C: "4"
     }
 ];
 var timerEl = document.getElementById("quiz-timer");
 var questionWrapEl = document.querySelector(".question-wrapper");
 var scoreWrapEl = document.querySelector(".score-wrapper");
 var mainPageEl = document.querySelector(".page-content");
-var timeLeft = 60;
+var timeLeft = 15;
 var quizTimer;
 var quizLength = quizData.length; 
 var questionNumber = 0;
@@ -44,6 +49,7 @@ var startPage = function() {
     //Button that starts the quiz
     var startQuizBtn = document.createElement("button");
     startQuizBtn.setAttribute("class","start-btn");
+    startQuizBtn.setAttribute("onclick","startTheQuiz()");
     startQuizBtn.textContent = "Start Quiz";
 
     //Add all the elements to the page
@@ -61,9 +67,16 @@ var scoreTimer = function() {
         else {
             timerEl.textContent = "Timer: DONE";
             clearInterval(timeInterval);
+            submitScore();
         }
     },1000);
     return timeInterval;
+};
+
+var startTheQuiz = function() {
+    quizTimer = scoreTimer();
+    loadScores();
+    askQuestion(0);
 };
 
 var askQuestion = function(i) {
@@ -87,9 +100,12 @@ var askQuestion = function(i) {
         var answerEl = document.createElement("li");
         answerEl.textContent =  answer;
         answerEl.innerHTML = "<button class='answer-btn' id='1'>" + answer + "</button>";
+        answerEl.setAttribute("answer-id",j);
         answerChoicesEl.appendChild(answerEl);
     }
         questionWrapEl.appendChild(answerChoicesEl);
+    
+    questionNumber++; //TESTING
 };
 
 var submitScore = function() {
@@ -102,7 +118,12 @@ var submitScore = function() {
 
     //stop the timer and set the final score, adding 1 to final result
     clearInterval(quizTimer);
-    var score = timeLeft + 1;
+    if (timeLeft > 0) {
+        var score = timeLeft + 1;
+    } 
+    else {
+        var score = 0;
+    }
     
     //setup the h2/title element and set the textContent
     var endTitleEl = document.createElement("h2");
@@ -159,7 +180,8 @@ var viewHighScores = function() {
     //get the buttons on the page
     var startOverBtn = document.createElement("button");
     startOverBtn.setAttribute("class","restart-btn");
-    startOverBtn.textContent = "Go Back";
+    startOverBtn.setAttribute("onclick","startOver()");
+    startOverBtn.textContent = "Start Over";
     scoreWrapEl.appendChild(startOverBtn);
 
     var clearScoresBtn = document.createElement("button");
@@ -185,6 +207,10 @@ var viewHighScores = function() {
 
 };
 
+var startOver = function() {
+    location.reload();
+};
+
 var loadScores = function() {
     //get scores and put in the scores array of objects from local storage and load back to tasks array
     var savedScores = localStorage.getItem("scores");
@@ -202,15 +228,7 @@ var deleteScores = function() {
     localStorage.removeItem("scores");
 };
 
-var reStart = function() {
-    // console.log(document.querySelector(".page-content"));
-
-    // scoreWrapEl.remove();
-    // // questionWrapEl.append();
-
-};
-
-//--------------This will control everything about this game.
+//--------------------------FOR WHEN YOU SELECT AN ANSWER TO A QUESTION
 var answerButtonHandler = function(event) {
     //buttons will call relevant functions to create HMTL when clicked
     event.preventDefault();
@@ -218,18 +236,18 @@ var answerButtonHandler = function(event) {
         submitScore();
         console.log("Did i make it here!" + "--submitscore");
     }
-    else if (event.target.matches(".start-btn")) {
-        questionNumber = 0; //always reset to 0 if the start button was clicked
-        quizTimer = scoreTimer();
-        loadScores();
-        askQuestion(questionNumber);
-        questionNumber++;
-        console.log("Did i make it here!" + "--ask first question");
+    // else if (event.target.matches(".start-btn")) {
+    //     questionNumber = 0; //always reset to 0 if the start button was clicked
+    //     quizTimer = scoreTimer();
+    //     loadScores();
+    //     askQuestion(questionNumber);
+    //     questionNumber++;
+    //     console.log("Did i make it here!" + "--ask first question");
 
-    }
+    // }
     else if (event.target.matches(".answer-btn")) {
         askQuestion(questionNumber);
-        questionNumber++;
+        // questionNumber++;
         console.log("Did i make it here!" + "--ask question");
     }
 };
