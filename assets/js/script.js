@@ -30,8 +30,10 @@ var timerEl = document.getElementById("quiz-timer");
 var questionWrapEl = document.querySelector(".question-wrapper");
 var scoreWrapEl = document.querySelector(".score-wrapper");
 var mainPageEl = document.querySelector(".page-content");
+var getHighScoresEl = document.getElementById("high-scores");
 var msg = document.querySelector(".msg");
-var timeLeft = 60;
+var timeLimit = 60;  //do this in case we want to reset the clock but not mess with current time left on quiz
+var timeLeft = timeLimit;
 var quizTimer;
 var quizLength = quizData.length; 
 var questionNumber = 0;
@@ -261,6 +263,22 @@ var checkAnswer = function(answer) {
     questionNumber++; //increment the question counter after confirming the last answer.
 };
 
+var clickForHighScores = function() {   
+    //Clear the screen
+    questionWrapEl.remove();
+    scoreWrapEl.innerHTML = "";
+
+    //Stop the timer
+    clearInterval(quizTimer);
+    timerEl.textContent = "Timer: " + timeLimit;
+
+    //Load the scores variable
+    loadScores();
+
+    //Show the scores screen
+    viewHighScores();
+};
+
 //--------------------------FOR WHEN YOU SELECT AN ANSWER TO A QUESTION
 var answeredButtonHandler = function(event) {
     //when question is answered then those clicked buttons will call here
@@ -298,4 +316,8 @@ var scoreHandler = function(event) {
 questionWrapEl.addEventListener("click",answeredButtonHandler);
 scoreWrapEl.addEventListener("click",scoreHandler);
 //---------------------------------------------------------Calls
+//setup the link to get high scores
+getHighScoresEl.setAttribute("onclick","clickForHighScores()");
+
+//call the starting page
 startPage();
