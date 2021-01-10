@@ -1,4 +1,4 @@
-//---------------------------------------------------------Variables
+//---------------------------------------------------------------------------------VARIABLES
 var quizData = [
     { 
         Q: "Commonly used data types DO NOT include:", 
@@ -23,12 +23,36 @@ var quizData = [
 ];
 var timerEl = document.getElementById("quiz-timer");
 var questionWrapEl = document.querySelector(".question-wrapper");
+var scoreWrapEl = document.querySelector(".score-wrapper");
+var mainPageEl = document.querySelector(".page-content");
 var timeLeft = 60;
+var quizTimer;
 var quizLength = quizData.length; 
 var questionNumber = 0;
+var scores = [];
 
-//---------------------------------------------------------Functions
-function scoreTimer() {
+//---------------------------------------------------------------------------------FUNCTIONS
+var startPage = function() {
+    //Heading for the quiz 
+    var welcomeTitleEl = document.createElement("h2");
+    welcomeTitleEl.textContent = "Coding Quiz Challenge";
+
+    //Instructions about how the quiz works.
+    var welcomeInstructionsEl = document.createElement("p");
+    welcomeInstructionsEl.textContent = "Try to answer the following code-related questions withing the time limit. \nKeep in mind that incorrect answers will penalize your score/time \nby ten seconds!";
+
+    //Button that starts the quiz
+    var startQuizBtn = document.createElement("button");
+    startQuizBtn.setAttribute("class","start-btn");
+    startQuizBtn.textContent = "Start Quiz";
+
+    //Add all the elements to the page
+    questionWrapEl.appendChild(welcomeTitleEl);
+    questionWrapEl.appendChild(welcomeInstructionsEl);
+    questionWrapEl.appendChild(startQuizBtn);
+};
+
+var scoreTimer = function() {
     var timeInterval = setInterval(function() {
         if (timeLeft > 0) {
             timerEl.textContent = "Timer: " + timeLeft;
@@ -39,76 +63,24 @@ function scoreTimer() {
             clearInterval(timeInterval);
         }
     },1000);
-}
-
-var submitScore = function() {
-    questionWrapEl.innerHTML = ""; //clear last questions
-    var score = timeLeft;
-    clearInterval();
-    
-    var endTitleEl = document.createElement("h2");
-    endTitleEl.textContent = "All done";
-    var endInstructionsEl = document.createElement("p");
-    endInstructionsEl.textContent = "Your score is " + score;
-
-    var inputInitials = document.createElement("input");
-
-    var submitBtn = document.createElement("button");
-    submitBtn.setAttribute("class","initials-btn");
-    submitBtn.textContent = "Submit";
-
-    questionWrapEl.appendChild(endTitleEl);
-    questionWrapEl.appendChild(endInstructionsEl);
-    questionWrapEl.appendChild(inputInitials);
-    questionWrapEl.appendChild(submitBtn);
-
-}
-
-var storeScore = function() {
-    //local storage setItem
-}
-
-var highScores = function() {
-    //local storage getItem
-    var savedScores = "";
-    var score = timeLeft;
-    questionWrapEl.innerHTML = ""; //clear last questions
-  
-    var highScoresEl = document.createElement("h2");
-    highScoresEl.textContent = "High Scores";
-    
-    var scoresListEl = document.createElement("ul");
-  
-    //for loop over the object returned from getItem
-    for (let i = 0; i < savedScores.length; j++) {
-        const iniScore = savedScores[i];
-        var scoreStringEl = document.createElement("li");
-        scoreStringEl.textContent =  iniScore;
-        scoreStringEl.innerHTML = "<button class='answer-btn' id='1'>" + answer + "</button>";
-        scoresListEl.appendChild(answerEl);
-    }
-
-    var startOverBtn = document.createElement("button");
-    startOverBtn.setAttribute("class","start-over-btn");
-    startOverBtn.textContent = "Go Back";
-
-    var clearScoresBtn = document.createElement("button");
-    clearScoresBtn.setAttribute("class", "clear-scores");
-
-    questionWrapEl.appendChild(highScoresEl);
-    questionWrapEl.appendChild(scoresListEl);
-    questionWrapEl.appendChild(startOverBtn);
-    questionWrapEl.appendChild(clearScoresBtn);
-}
+    return timeInterval;
+};
 
 var askQuestion = function(i) {
-    questionWrapEl.innerHTML = ""; //clear out previous data
+    //clear out the previous data on the page
+    questionWrapEl.innerHTML = "";
 
+    //element represents an object element from the quizData array
+    //each object element stores a question and answer
     var element = quizData[i];
-    var questionEl = document.createElement("h2");
-    var answerChoicesEl = document.createElement("ul");
-    questionEl.textContent = element.Q;
 
+    //setup the h2/question element and set the textContent
+    var questionEl = document.createElement("h2");
+    questionEl.textContent = element.Q;
+    questionWrapEl.appendChild(questionEl);
+
+    //setup the ul/li/answers list element and and answers
+    var answerChoicesEl = document.createElement("ul");
     var answerList = element.A;        
     for (let j = 0; j < answerList.length; j++) {
         const answer = answerList[j];
@@ -117,53 +89,172 @@ var askQuestion = function(i) {
         answerEl.innerHTML = "<button class='answer-btn' id='1'>" + answer + "</button>";
         answerChoicesEl.appendChild(answerEl);
     }
-    questionWrapEl.appendChild(questionEl);
-    questionWrapEl.appendChild(answerChoicesEl);
+        questionWrapEl.appendChild(answerChoicesEl);
+};
 
-}
+var submitScore = function() {
+    //This is the results screen after taking the quiz
+    //clear out the previous data on the page
+    // questionWrapEl.innerHTML = "";
+    // mainPageEl.removeChild(questionWrapEl);
+    questionWrapEl.remove();
+    scoreWrapEl.innerHTML = "";
 
-var startPage = function() {
-    //Start page for the quiz 
+    //stop the timer and set the final score, adding 1 to final result
+    clearInterval(quizTimer);
+    var score = timeLeft + 1;
+    
+    //setup the h2/title element and set the textContent
+    var endTitleEl = document.createElement("h2");
+    endTitleEl.textContent = "All done";
+    scoreWrapEl.appendChild(endTitleEl);
 
-    var welcomeTitleEl = document.createElement("h2");
-    welcomeTitleEl.textContent = "Coding Quiz Challenge";
-    var welcomeInstructionsEl = document.createElement("p");
-    welcomeInstructionsEl.textContent = "Try to answer the following code-related questions withing the time limit. \nKeep in mind that incorrect answers will penalize your score/time \nby ten seconds!";
-    var startQuizBtn = document.createElement("button");
-    startQuizBtn.setAttribute("class","start-btn");
-    startQuizBtn.textContent = "Start Quiz";
+    //setup the p/final message about score/instructions
+    var endInstructionsEl = document.createElement("p");
+    endInstructionsEl.textContent = "Your score is " + score;
+    scoreWrapEl.appendChild(endInstructionsEl);
 
-    questionWrapEl.appendChild(welcomeTitleEl);
-    questionWrapEl.appendChild(welcomeInstructionsEl);
-    questionWrapEl.appendChild(startQuizBtn);
+    //setup an input field to capture users initials
+    var inputInitials = document.createElement("input");
+    inputInitials.setAttribute("type","text");
+    inputInitials.setAttribute("name","ini");
+    inputInitials.setAttribute("placeholder","Enter your initials!");
+    scoreWrapEl.appendChild(inputInitials);
+
+    //setup a submit score button
+    var submitBtn = document.createElement("button");
+    submitBtn.setAttribute("class","submit-score-btn");
+    submitBtn.textContent = "Submit Score";
+    scoreWrapEl.appendChild(submitBtn);
+};
+
+var saveScores = function() {
+    //local storage setItem
+    // localStorage.setItem("tasks", tasks);
+    var initialsEl = document.querySelector("input[name='ini']").value;
+
+    var scoreDataObj = {
+        initials: initialsEl,
+        score: timeLeft+1,
+    };
+    scores.push(scoreDataObj);
+    localStorage.setItem("scores", JSON.stringify(scores));
+};
+
+var viewHighScores = function() {
+    //clear the screen and get ready for high scores screen!
+    scoreWrapEl.innerHTML = "";
+   
+    //setup the h2/header for the high scores page
+    var highScoresEl = document.createElement("h2");
+    highScoresEl.textContent = "High Scores";
+    scoreWrapEl.appendChild(highScoresEl);
+    
+    //setup an unordered list of the high scores(not sorted)
+    var scoresListEl = document.createElement("ul");
+    scoreWrapEl.appendChild(scoresListEl);
+  
+    if (!scores.length) {scoresListEl.innerHTML = "";}
+
+    //get the buttons on the page
+    var startOverBtn = document.createElement("button");
+    startOverBtn.setAttribute("class","restart-btn");
+    startOverBtn.textContent = "Go Back";
+    scoreWrapEl.appendChild(startOverBtn);
+
+    var clearScoresBtn = document.createElement("button");
+    clearScoresBtn.setAttribute("class", "clear-scores-btn");
+    clearScoresBtn.textContent = "Clear Scores";
+    scoreWrapEl.appendChild(clearScoresBtn);
+
+    // //reload tasks from localStorage
+    // var savedScores = localStorage.getItem("scores");
+    // if (!savedScores) {
+    //     return false;
+    // }
+    // //convert scores to an array of objects
+    // scores = JSON.parse(savedScores);
+
+    //for loop over the object returned from getItem
+    for (let i = 0; i < scores.length; i++) {
+        const element = scores[i];
+        var scoreStringEl = document.createElement("li");
+        scoreStringEl.textContent =  element.initials + "  -  " + element.score;
+        scoresListEl.appendChild(scoreStringEl);
+    }
 
 };
 
+var loadScores = function() {
+    //get scores and put in the scores array of objects from local storage and load back to tasks array
+    var savedScores = localStorage.getItem("scores");
+    
+    if (!savedScores) {
+        return false;
+    }
+
+    //convert tasks to an array object
+    scores = JSON.parse(savedScores);
+
+};
+
+var deleteScores = function() {
+    localStorage.removeItem("scores");
+};
+
+var reStart = function() {
+    // console.log(document.querySelector(".page-content"));
+
+    // scoreWrapEl.remove();
+    // // questionWrapEl.append();
+
+};
+
+//--------------This will control everything about this game.
 var answerButtonHandler = function(event) {
-    // console.log(event.target); //logs what object triggered event
+    //buttons will call relevant functions to create HMTL when clicked
+    event.preventDefault();
     if (questionNumber >= quizLength) {
         submitScore();
+        console.log("Did i make it here!" + "--submitscore");
     }
     else if (event.target.matches(".start-btn")) {
         questionNumber = 0; //always reset to 0 if the start button was clicked
-        scoreTimer();
+        quizTimer = scoreTimer();
+        loadScores();
         askQuestion(questionNumber);
         questionNumber++;
+        console.log("Did i make it here!" + "--ask first question");
+
     }
     else if (event.target.matches(".answer-btn")) {
         askQuestion(questionNumber);
         questionNumber++;
+        console.log("Did i make it here!" + "--ask question");
     }
-    else if (event.target.matches(".initials-btn")) {
-        highScores();
+};
+
+var scoreHandler = function(event) {
+    event.preventDefault();
+    console.log(event.currentTarget);
+    if (event.target.matches(".submit-score-btn")) {
+        saveScores();
+        viewHighScores();
     }
-    else {
-        return;
+    else if (event.target.matches(".clear-scores-btn")){
+        console.log("Clear scores");
+        event.stopImmediatePropagation();
+        deleteScores();
+        reStart();
+    }
+    else if (event.target.matches(".restart-btn")); {
+        console.log("Start Over!");
+        reStart();
     }
 };
 
 //---------------------------------------------------------Listeners
 questionWrapEl.addEventListener("click",answerButtonHandler);
-
+scoreWrapEl.addEventListener("click",scoreHandler);
 //---------------------------------------------------------Calls
 startPage();

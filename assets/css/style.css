@@ -1,19 +1,43 @@
+body {
+    margin: auto;
+    width: auto;
+}
 ul {
     list-style-type: none;
 }
 header {
     display:flex;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
 }
 header h1, header p {
     flex: 1;
 }
 main {
-    display: flex;
-    justify-content: center;
+    margin: 100px;
+    align-items: baseline;
+    display: flex; 
+    flex-direction: column;
+    justify-content: center;    
 }
 .question-wrapper {
     flex: 1;
 }
-.answer-wrapper {
+.score-wrapper {
+    flex: 1;
+}
+
+.li {
+    margin: 30px;
+}
+
+footer {
+    text-align: left;
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+footer p {
     flex: 1;
 }
