@@ -1,6 +1,27 @@
+/* A good bit of the CSS below is from the Taskinator project from class, especially for the header and body portions */
+* {
+    box-sizing: border-box;
+  }
+  
+  :root {
+    --primary: #44e9ff;
+    --secondary: #497980;
+    --tertiary: rgb(192, 246, 253);
+    --grey: #333;
+    font-size: 62.5%;
+  }
+
 body {
-    margin: auto;
-    width: auto;
+    /* margin: auto;
+    width: auto; */
+    background: #ededed;
+    color: var(--grey);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 ul {
     list-style-type: none;
@@ -10,12 +31,23 @@ header {
     justify-content: space-around;
     align-items: center;
     text-align: center;
-    
+    background: var(--secondary);
+    padding: 30px 25px;
+    border-bottom: 5px solid var(--primary);
 }
+
 header h1, header p {
     flex: 1;
-    font-size:xx-large;
+    color: var(--tertiary);
+    margin: 5px 0 20px;
+    font-size: 2rem;
 }
+
+p,
+li {
+  font-size: 1.6rem;
+}
+
 main {
     margin: 100px;
     align-items: baseline;
@@ -43,3 +75,74 @@ footer {
 footer p {
     flex: 1;
 }
+
+.page-content {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 25px auto;
+    width: 95%;
+  }
+
+  .question-wrapper, .score-wrapper {
+    flex: 1;
+    margin: 0 20px 20px;
+  }
+
+  .msg {
+    flex: 1;
+    margin: 0 20px 20px;
+    font-size: xx-large;
+    justify-self: flex-start;
+  }
+
+.btn {
+    margin: 1rem;
+    outline: none;
+    border: none;
+    display: inline-block;
+    padding: 10px 15px;
+    background: var(--primary);
+    font-size: 2.2rem;
+    border-radius: 12px;
+    position: relative;
+    top: -3px;
+    /* box-shadow: 0 3px var(--grey); */
+  }
+  
+  .btn:hover {
+    box-shadow: 0 2px var(--grey);
+    top: -2px;
+  }
+  .btn:active {
+    box-shadow: 0 0px var(--grey);
+    top: 0;
+  }
+
+  input {
+    outline: none;
+    border: none;
+    padding: 12px;
+    width: 100%;
+    font-size: 2.2rem;
+    border: 2px solid var(--grey);
+    border-radius: 12px;
+  }
+
+  .score-item {
+    color: var(--grey);
+    padding: 5px 5px;
+    border: 2px solid var(--grey);
+    background: var(--tertiary);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  @media screen and (max-width: 980px) {
+    .question-wrapper, .score-wrapper, .msg {
+      flex-basis: 100%;
+    }
+  
+  }

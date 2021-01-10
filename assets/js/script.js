@@ -7,7 +7,7 @@ var quizData = [
     },
     {
         Q: "The condition in an if/else statement is enclosed with __________.",
-        A: ["quotes", "curly brackets", "parenthesis-1", "square brackets"],
+        A: ["quotes", "curly brackets", "parenthesis", "square brackets"],
         C: "2"
     },
     {
@@ -52,6 +52,7 @@ var startPage = function() {
     //Button that starts the quiz
     var startQuizBtn = document.createElement("button");
     startQuizBtn.setAttribute("class","start-btn");
+    startQuizBtn.setAttribute("class","btn");
     startQuizBtn.setAttribute("onclick","startTheQuiz()");
     startQuizBtn.textContent = "Start Quiz";
 
@@ -100,13 +101,15 @@ var askQuestion = function(number) {
 
     //setup the ul/li/answers list element and and answers
     var answerChoicesEl = document.createElement("ul");
+    answerChoicesEl.setAttribute("class","answer-list");
     var answerList = element.A;        
     for (let j = 0; j < answerList.length; j++) {
         const answer = answerList[j];
         var answerListItemEl = document.createElement("li");
+        answerListItemEl.setAttribute("class","answer-item");
         var answerBtnEl = document.createElement("button")
 
-        answerBtnEl.setAttribute("class","answer-btn");
+        answerBtnEl.setAttribute("class","answer-btn btn");
         answerBtnEl.setAttribute("data-task-id",j);
         answerBtnEl.textContent = answer;
 
@@ -154,7 +157,7 @@ var submitScore = function() {
 
     //setup a submit score button
     var submitBtn = document.createElement("button");
-    submitBtn.setAttribute("class","submit-score-btn");
+    submitBtn.setAttribute("class","submit-score-btn btn");
     submitBtn.textContent = "Submit Score";
     scoreWrapEl.appendChild(submitBtn);
 };
@@ -164,7 +167,7 @@ var saveScores = function() {
     // localStorage.setItem("tasks", tasks);
     var initialsEl = document.querySelector("input[name='ini']").value;
     if (!initialsEl) {
-        initialsEl = "ANONYMOUS"
+        initialsEl = "ANONYMOUS USER"
     }
 
     var scoreDataObj = {
@@ -192,13 +195,13 @@ var viewHighScores = function() {
 
     //get the buttons on the page
     var startOverBtn = document.createElement("button");
-    startOverBtn.setAttribute("class","restart-btn");
+    startOverBtn.setAttribute("class","restart-btn btn");
     startOverBtn.setAttribute("onclick","startOver()");
     startOverBtn.textContent = "Start Over";
     scoreWrapEl.appendChild(startOverBtn);
 
     var clearScoresBtn = document.createElement("button");
-    clearScoresBtn.setAttribute("class", "clear-scores-btn");
+    clearScoresBtn.setAttribute("class", "clear-scores-btn btn");
     clearScoresBtn.setAttribute("onclick","deleteScores()");
     clearScoresBtn.textContent = "Clear Scores";
     scoreWrapEl.appendChild(clearScoresBtn);
@@ -215,6 +218,7 @@ var viewHighScores = function() {
     for (let i = 0; i < scores.length; i++) {
         const element = scores[i];
         var scoreStringEl = document.createElement("li");
+        scoreStringEl.setAttribute("class","score-item");
         scoreStringEl.textContent =  element.initials + "  -  " + element.score;
         scoresListEl.appendChild(scoreStringEl);
     }
